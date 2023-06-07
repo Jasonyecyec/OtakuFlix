@@ -15,7 +15,11 @@ const MobileMenu = () => {
     // Function to handle clicks outside the menu
     const handleClickOutside = (event) => {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
-        toggleActive();
+        // console.log(menuRef.current);
+        // console.log(!menuRef.current.contains(event.target));
+        if (isActive) {
+          toggleActive();
+        }
       }
     };
 
@@ -38,7 +42,7 @@ const MobileMenu = () => {
       // Remove event listener for link clicks inside the customLinkRef element
       customLinkRef.current.removeEventListener("click", handleClickLink);
     };
-  }, [toggleActive]); //track when toggleActive changes
+  }, [isActive, toggleActive]); //track when toggleActive changes or dependency changes
 
   return (
     <div
@@ -51,25 +55,25 @@ const MobileMenu = () => {
           to="/home"
           text="Home"
           icon={<HomeIcon />}
-          onClick={toggleActive}
+          // onClick={toggleActive}
         />
         <CustomLink
           to="/anime"
           text="Anime"
           icon={<AnimeIcon />}
-          onClick={toggleActive}
+          // onClick={toggleActive}
         />
         <CustomLink
           to="/manga"
           text="Manga"
           icon={<MangaIcon />}
-          onClick={toggleActive}
+          // onClick={toggleActive}
         />
         <CustomLink
           to="/manhwa"
           text="Manhwa"
           icon={<MangaIcon />}
-          onClick={toggleActive}
+          // onClick={toggleActive}
         />
       </ul>
     </div>

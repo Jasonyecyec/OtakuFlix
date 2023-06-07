@@ -18,9 +18,12 @@ import CarouselSkeletonLoader from "./CarouselSkeletonLoader";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
+import { useNavbarStore } from "/src/store/store.js";
+
 SwiperCore.use([Pagination]);
 
 const TrendingCarousel = ({ title }) => {
+  const { isActive, toggleActive } = useNavbarStore();
   const swiperEl = useRef(null);
 
   // assuming `data` is an array of items to be rendered in SwiperSlides
@@ -32,6 +35,12 @@ const TrendingCarousel = ({ title }) => {
       setIsLoading(false);
     }, 3000);
   }, []);
+
+  const handleClickLink = (event) => {
+    if (isActive) {
+      toggleActive();
+    }
+  };
 
   const slideNext = () => {
     swiperEl.current.swiper.slideNext();
@@ -100,7 +109,7 @@ const TrendingCarousel = ({ title }) => {
                 <SwiperSlide key={index}>
                   {" "}
                   <div className="bg-subBackground h-full rounded-md drop-shadow-2xl ">
-                    <Link to="/anime">
+                    <Link to="/anime" onClick={handleClickLink}>
                       {/* Anime Cover*/}
                       <div className="h-56 bg-red-300 rounded-t-md relative">
                         <img
