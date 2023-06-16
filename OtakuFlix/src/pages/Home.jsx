@@ -13,11 +13,11 @@ const Home = () => {
 
       {/*  */}
 
-      <TrendingCarousel title="Trending Now" />
+      <TrendingCarousel title="Trending Now" url="top-airing?page=2" />
 
       {/* ========= */}
 
-      <TrendingCarousel title="Recently Added" />
+      <TrendingCarousel title="Recently Added" url="recent-episodes" />
 
       <Footer />
     </main>

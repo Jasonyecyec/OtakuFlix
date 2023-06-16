@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 import "swiper/css";
 import "swiper/css/pagination";
@@ -19,22 +20,15 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
 import { useNavbarStore } from "/src/store/store.js";
+import useFetchAnimeList from "../hooks/useFetchAnimeList";
 
 SwiperCore.use([Pagination]);
 
-const TrendingCarousel = ({ title }) => {
+const TrendingCarousel = ({ title, url }) => {
   const { isActive, toggleActive } = useNavbarStore();
   const swiperEl = useRef(null);
 
-  // assuming `data` is an array of items to be rendered in SwiperSlides
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    // simulate loading delay
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 3000);
-  }, []);
+  const { isLoading, trendingNow } = useFetchAnimeList(url);
 
   const handleClickLink = (event) => {
     if (isActive) {
@@ -49,9 +43,6 @@ const TrendingCarousel = ({ title }) => {
   const slidePrev = () => {
     swiperEl.current.swiper.slidePrev();
   };
-  const skeletonArray = Array.from({ length: 8 }).map((_, index) => (
-    <CarouselSkeletonLoader key={index} />
-  ));
 
   return (
     <div className="  mt-10   bg-red-40">
@@ -97,50 +88,53 @@ const TrendingCarousel = ({ title }) => {
         }}
         className="trending-swiper"
       >
-        {isLoading
-          ? Array.from({ length: 8 }).map((item, index) => (
+        {isLoading && (trendingNow === null || trendingNow === undefined)
+          ? Array.from({ length: 10 }).map((item, index) => (
               <SwiperSlide key={index}>
                 <CarouselSkeletonLoader />
               </SwiperSlide>
             ))
-          : Array(8)
-              .fill(0)
-              .map((item, index) => (
-                <SwiperSlide key={index}>
-                  {" "}
-                  <div className="bg-subBackground h-full rounded-md drop-shadow-2xl ">
-                    <Link to="/anime" onClick={handleClickLink}>
-                      {/* Anime Cover*/}
-                      <div className="h-56 bg-red-300 rounded-t-md relative">
-                        <img
-                          src={demonSlayer}
-                          alt=""
-                          className="h-full w-full object-cover rounded-t-md image-cover"
-                        />
+          : trendingNow &&
+            trendingNow.data.results &&
+            trendingNow.data.results.map((anime) => (
+              <SwiperSlide key={anime.id}>
+                {" "}
+                <div className="bg-subBackground h-[22.5rem] rounded-md drop-shadow-2xl ">
+                  <Link to="/anime" onClick={handleClickLink}>
+                    {/* Anime Cover*/}
+                    <div className="h-56 rounded-t-md relative">
+                      <img
+                        src={anime.image}
+                        alt=""
+                        className="h-full w-full object-cover rounded-t-md image-cover"
+                      />
 
-                        {/* RATING*/}
-                        <div className="bg-white absolute top-1 left-1 p-1 rounded flex ">
-                          <p className="flex items-center text-sm font-medium justify-center">
-                            7.4 <img src={ratingStar} alt="" className="w-5 " />
-                          </p>
-                        </div>
-
-                        {/* Episodes */}
-                        <div className="bg-primary rounded absolute bottom-1 right-1 p-1 font-medium">
-                          Ep 4/?
-                        </div>
+                      {/* RATING*/}
+                      <div className="bg-white absolute top-1 left-1 p-1 rounded flex ">
+                        <p className="flex items-center text-sm font-semibold justify-center">
+                          {anime.subOrDub.toUpperCase()}{" "}
+                          {/* <img src={ratingStar} alt="" className="w-5 " /> */}
+                        </p>
                       </div>
-                    </Link>
 
-                    <div className="space-y-3 p-2">
-                      <h1 className="text-white font-semibold text-lg anime-title">
-                        Demon Slayer: Kimetsu no Yaiba Swordsmith Village Arc
-                      </h1>
-                      <p className="text-white text-base">TV • Action • 25m</p>
+                      {/* Episodes */}
+                      <div className="bg-primary rounded absolute bottom-1 right-1 p-1 font-medium">
+                        Ep {anime.totalEpisodes}/{anime.totalEpisodes}
+                      </div>
                     </div>
+                  </Link>
+
+                  <div className="space-y-2 p-2">
+                    <h1 className="text-white font-semibold text-base anime-title  line-clamp-3">
+                      {anime.title}
+                    </h1>
+                    <p className="text-[#b4b4b4] text-sm">
+                      {anime.type} • {anime.genres[0]} • {anime.status}
+                    </p>
                   </div>
-                </SwiperSlide>
-              ))}
+                </div>
+              </SwiperSlide>
+            ))}
       </Swiper>
     </div>
   );

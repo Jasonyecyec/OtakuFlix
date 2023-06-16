@@ -1,15 +1,39 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useNavbarStore } from "/src/store/store.js";
 import SearchIcon from "./icons/SearchIcon";
+import styled, { css } from "styled-components";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import Search from "../pages/Search";
+
+const HoveredDiv = styled.div`
+  background-color: ${(props) => (props.one ? "#1A1A1D" : "#202022")};
+  display: flex;
+  padding: 0.75rem;
+  cursor: pointer;
+  color: #b4b4b4;
+  transition: 150ms ease-in-out;
+
+  &:hover #hovered-paragraph {
+    color: white;
+  }
+
+  &:hover {
+    background-color: #29292c;
+  }
+`;
 
 const SearchBar = () => {
   const { isSearchActive, toggleSearchActive } = useNavbarStore();
   const [searchInput, setSearchInput] = useState("");
+  const navigate = useNavigate();
+  const location = useLocation();
+  const pagesURL = ["home", "anime", "manga", "manhwa"];
 
   // assuming `data` is an array of items to be rendered in search results
   const [searchResults, setSearchResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const SearchBarRef = useRef(null);
+  const inputRef = useRef(null);
 
   useEffect(() => {
     // simulate loading delay
@@ -21,7 +45,7 @@ const SearchBar = () => {
       // setSearchResults(results);
       setTimeout(() => {
         setIsLoading(false);
-      }, 3000);
+      }, 2000);
     };
 
     fetchData();
@@ -56,6 +80,28 @@ const SearchBar = () => {
     setIsLoading(true);
   };
 
+  // Function to handle result clicks
+  const handleClickLink = (event) => {
+    toggleSearchActive();
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    //reset search input
+    setSearchInput("");
+
+    //get the path from the url
+    const path = location.pathname;
+    const page = pagesURL.find((pagesURL) => path.includes(pagesURL));
+
+    //toggle search bar
+    toggleSearchActive();
+
+    //redirect to search page
+    navigate(`/search/${page}?keyword=${searchInput}`);
+  };
+
   return (
     <div
       className={`absolute w-full rounded-md text-white bg-subBackground top-14 left-0 z-10 p-2 drop-shadow-xl
@@ -63,18 +109,22 @@ const SearchBar = () => {
       ref={SearchBarRef}
     >
       <div className="relative">
-        <input
-          type="text"
-          className="rounded w-full bg-[#4E4E50] px-3 py-1"
-          placeholder="Search..."
-          onChange={handleSearchInputChanged}
-        />
+        <form onSubmit={handleSubmit}>
+          <input
+            type="text"
+            className="rounded w-full bg-[#4E4E50] px-3 py-1 focus:outline-none"
+            placeholder="Search..."
+            onChange={handleSearchInputChanged}
+            value={searchInput}
+            required
+          />
 
-        <div className=" absolute right-3 top-1">
-          <button className="p-1">
-            <SearchIcon color={"white"} />
-          </button>
-        </div>
+          <div className=" absolute right-3 top-1">
+            <button className="p-1" type="submit">
+              <SearchIcon color={"white"} />
+            </button>
+          </div>
+        </form>
 
         {/* Search Result */}
         <div className="search-result-container w-full mt-3 rounded ">
@@ -96,44 +146,73 @@ const SearchBar = () => {
             <p>Empty</p>
           ) : (
             <div className="list-result-container">
-              <div className="bg-[#202022] flex p-3">
-                <div className="bg-blue-200">
-                  <img src="" alt="" className="w-10 h-10" />
-                </div>
+              <Link to="/watch" onClick={handleClickLink}>
+                <HoveredDiv>
+                  <div className="bg-blue-200">
+                    <img src="" alt="" className="w-10 h-10" />
+                  </div>
 
-                <div className="ml-3">
-                  <p className="font-semibold text-base mb-1">One Piece</p>
-                  <p className="text-xs decoration-gray-300	">
-                    Oct 20, 1999 • TV Series • 24m
-                  </p>
-                </div>
-              </div>
+                  <div className="ml-3">
+                    <p className="font-semibold text-base mb-1 text-white">
+                      One Piece
+                    </p>
+                    <p className="text-xs" id="hovered-paragraph">
+                      Oct 20, 1999 • TV Series • 24m
+                    </p>
+                  </div>
+                </HoveredDiv>
+              </Link>
 
-              <div className="bg-[#1A1A1D] flex p-3">
-                <div className="bg-blue-200">
-                  <img src="" alt="" className="w-10 h-10" />
-                </div>
+              <Link to="/watch" onClick={handleClickLink}>
+                <HoveredDiv one>
+                  <div className="bg-blue-200">
+                    <img src="" alt="" className="w-10 h-10" />
+                  </div>
 
-                <div className="ml-3">
-                  <p className="font-semibold text-base mb-1">One Piece</p>
-                  <p className="text-xs decoration-gray-300	">
-                    Oct 20, 1999 • TV Series • 24m
-                  </p>
-                </div>
-              </div>
+                  <div className="ml-3">
+                    <p className="font-semibold text-base mb-1 text-white">
+                      One Piece
+                    </p>
+                    <p className="text-xs" id="hovered-paragraph">
+                      Oct 20, 1999 • TV Series • 24m
+                    </p>
+                  </div>
+                </HoveredDiv>
+              </Link>
 
-              <div className="bg-[#202022] flex p-3">
-                <div className="bg-blue-200">
-                  <img src="" alt="" className="w-10 h-10" />
-                </div>
+              <Link to="/watch" onClick={handleClickLink}>
+                <HoveredDiv>
+                  <div className="bg-blue-200">
+                    <img src="" alt="" className="w-10 h-10" />
+                  </div>
 
-                <div className="ml-3">
-                  <p className="font-semibold text-base mb-1">One Piece</p>
-                  <p className="text-xs decoration-gray-300	">
-                    Oct 20, 1999 • TV Series • 24m
-                  </p>
-                </div>
-              </div>
+                  <div className="ml-3">
+                    <p className="font-semibold text-base mb-1 text-white">
+                      One Piece
+                    </p>
+                    <p className="text-xs" id="hovered-paragraph">
+                      Oct 20, 1999 • TV Series • 24m
+                    </p>
+                  </div>
+                </HoveredDiv>
+              </Link>
+
+              <Link to="/watch" onClick={handleClickLink}>
+                <HoveredDiv one>
+                  <div className="bg-blue-200">
+                    <img src="" alt="" className="w-10 h-10" />
+                  </div>
+
+                  <div className="ml-3">
+                    <p className="font-semibold text-base mb-1 text-white">
+                      One Piece
+                    </p>
+                    <p className="text-xs" id="hovered-paragraph">
+                      Oct 20, 1999 • TV Series • 24m
+                    </p>
+                  </div>
+                </HoveredDiv>
+              </Link>
             </div>
           )}
         </div>

@@ -8,4 +8,11 @@ const useNavbarStore = create((set) => ({
     set((state) => ({ isSearchActive: !state.isSearchActive })),
 }));
 
-export { useNavbarStore };
+const useTopAnimeStore = create((set) => ({
+  isTopAnimeLoading: true,
+  setTopAnimeLoading: (isTopAnimeLoading) => set({ isTopAnimeLoading }),
+  topAnime: null,
+  setTopAnime: (topAnime) => set({ topAnime }),
+}));
+
+export { useNavbarStore, useTopAnimeStore };
