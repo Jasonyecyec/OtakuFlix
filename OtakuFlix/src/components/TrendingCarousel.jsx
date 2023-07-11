@@ -100,7 +100,7 @@ const TrendingCarousel = ({ title, url }) => {
               <SwiperSlide key={anime.id}>
                 {" "}
                 <div className="bg-subBackground h-[22.5rem] rounded-md drop-shadow-2xl ">
-                  <Link to="/anime" onClick={handleClickLink}>
+                  <Link to={`/watch/${anime.id}`} onClick={handleClickLink}>
                     {/* Anime Cover*/}
                     <div className="h-56 rounded-t-md relative">
                       <img

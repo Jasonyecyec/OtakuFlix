@@ -9,6 +9,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@vime/core": "^5.4.0",
+    "@vime/react": "^5.4.0",
     "axios": "^1.4.0",
     "localforage": "^1.10.0",
     "match-sorter": "^6.3.1",
