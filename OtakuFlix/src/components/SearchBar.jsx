@@ -4,6 +4,8 @@ import SearchIcon from "./icons/SearchIcon";
 import styled, { css } from "styled-components";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import Search from "../pages/Search";
+import axios from "axios";
+import useFetchAnimeSearch from "../hooks/useFetchAnimeSearch";
 
 const HoveredDiv = styled.div`
   background-color: ${(props) => (props.one ? "#1A1A1D" : "#202022")};
@@ -30,26 +32,33 @@ const SearchBar = () => {
   const pagesURL = ["home", "anime", "manga", "manhwa"];
 
   // assuming `data` is an array of items to be rendered in search results
-  const [searchResults, setSearchResults] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  // const [searchResults, setSearchResults] = useState([]);
+  // const [isLoading, setIsLoading] = useState(false);
+
   const SearchBarRef = useRef(null);
   const inputRef = useRef(null);
 
-  useEffect(() => {
-    // simulate loading delay
+  const { isLoading, searchResults, setIsLoading } =
+    useFetchAnimeSearch(searchInput);
 
-    const fetchData = async () => {
-      // Call your function that retrieves data based on the search input
-      // const results = await retrieveData(searchInput);
-      // Update the search results state with the retrieved data
-      // setSearchResults(results);
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 2000);
-    };
+  // useEffect(() => {
+  //   let isMounted = true;
 
-    fetchData();
-  }, [searchInput]);
+  //   const fetchData = async () => {
+  //     if (isMounted) {
+  //       try {
+  //         const getAnimeSearchResults = await getAnimeSearchResults(
+  //           searchInput
+  //         );
+  //         console.log(getAnimeSearchResults);
+  //       } catch (error) {
+  //         console.log(error);
+  //       }
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, [searchInput]);
 
   useEffect(() => {
     // Function to handle clicks outside the menu
@@ -146,73 +155,27 @@ const SearchBar = () => {
             <p>Empty</p>
           ) : (
             <div className="list-result-container">
-              <Link to="/watch" onClick={handleClickLink}>
-                <HoveredDiv>
-                  <div className="bg-blue-200">
-                    <img src="" alt="" className="w-10 h-10" />
-                  </div>
-
-                  <div className="ml-3">
-                    <p className="font-semibold text-base mb-1 text-white">
-                      One Piece
-                    </p>
-                    <p className="text-xs" id="hovered-paragraph">
-                      Oct 20, 1999 • TV Series • 24m
-                    </p>
-                  </div>
-                </HoveredDiv>
-              </Link>
-
-              <Link to="/watch" onClick={handleClickLink}>
-                <HoveredDiv one>
-                  <div className="bg-blue-200">
-                    <img src="" alt="" className="w-10 h-10" />
-                  </div>
-
-                  <div className="ml-3">
-                    <p className="font-semibold text-base mb-1 text-white">
-                      One Piece
-                    </p>
-                    <p className="text-xs" id="hovered-paragraph">
-                      Oct 20, 1999 • TV Series • 24m
-                    </p>
-                  </div>
-                </HoveredDiv>
-              </Link>
-
-              <Link to="/watch" onClick={handleClickLink}>
-                <HoveredDiv>
-                  <div className="bg-blue-200">
-                    <img src="" alt="" className="w-10 h-10" />
-                  </div>
-
-                  <div className="ml-3">
-                    <p className="font-semibold text-base mb-1 text-white">
-                      One Piece
-                    </p>
-                    <p className="text-xs" id="hovered-paragraph">
-                      Oct 20, 1999 • TV Series • 24m
-                    </p>
-                  </div>
-                </HoveredDiv>
-              </Link>
-
-              <Link to="/watch" onClick={handleClickLink}>
-                <HoveredDiv one>
-                  <div className="bg-blue-200">
-                    <img src="" alt="" className="w-10 h-10" />
-                  </div>
-
-                  <div className="ml-3">
-                    <p className="font-semibold text-base mb-1 text-white">
-                      One Piece
-                    </p>
-                    <p className="text-xs" id="hovered-paragraph">
-                      Oct 20, 1999 • TV Series • 24m
-                    </p>
-                  </div>
-                </HoveredDiv>
-              </Link>
+              {searchResults.data.length > 0 ? (
+                searchResults.data.map((anime) => (
+                  <Link to="/watch" onClick={handleClickLink}>
+                    <HoveredDiv key={anime.id}>
+                      <div className="bg-slate-900 object-contain">
+                        <img src={anime.image} alt="" className="w-10 h-10" />
+                      </div>
+                      <div className="ml-3">
+                        <p className="font-semibold text-base mb-1 text-white">
+                          {anime.title}
+                        </p>
+                        <p className="text-xs" id="hovered-paragraph">
+                          {anime.releaseDate} • {anime.type} • {anime.status}
+                        </p>
+                      </div>
+                    </HoveredDiv>
+                  </Link>
+                ))
+              ) : (
+                <p>No results found</p>
+              )}
             </div>
           )}
         </div>

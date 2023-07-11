@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
-import { getTopAnime } from "../services/apiService";
+import { getTopAnime, getAnimeInfo } from "../services/apiService";
 
 const useFetchAnimeList = (url) => {
   const [trendingNow, setTrendingNow] = useState(null);
@@ -19,7 +19,8 @@ const useFetchAnimeList = (url) => {
           const animeIds = topAnimeResult.data.results.map((anime) => anime.id);
 
           const animeInfoPromises = animeIds.map((id) =>
-            axios.get(`https://api.consumet.org/anime/gogoanime/info/${id}`)
+            // axios.get(`https://api.consumet.org/anime/gogoanime/info/${id}`)
+            getAnimeInfo(id)
           );
 
           const animeInfoResponses = await Promise.allSettled(

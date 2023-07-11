@@ -27,6 +27,7 @@ function App() {
         <Route path="/search/:path" element={<Search />} />
         <Route path="/search" element={<Search />} />
         <Route path="/watch" element={<WatchAnime />} />
+        <Route path="/watch/:path" element={<WatchAnime />} />
       </Routes>
     </div>
   );
