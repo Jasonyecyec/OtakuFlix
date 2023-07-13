@@ -25,7 +25,7 @@ const WatchAnime = () => {
       <div className="w-full bg-[#ae2e2e] object-cover rounded mt-10 ">
         <Player>
           {/* <Video ref={videoRef} crossOrigin="anonymous" /> */}
-          <Hls version="latest" poster="/media/poster.png">
+          <Hls version="latest">
             <source data-src={videoSource} type="application/x-mpegURL" />
           </Hls>
 
