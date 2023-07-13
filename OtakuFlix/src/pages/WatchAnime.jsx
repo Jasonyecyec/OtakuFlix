@@ -20,7 +20,7 @@ const WatchAnime = () => {
 
         // filter source only get highest quality
         const highestQuality = source.data.sources.find((item) => {
-          return item.quality === "1080p" || item.quality === "720p";
+          return item.quality === "720p";
         });
 
         setVideoSource(highestQuality.url);
