@@ -9,25 +9,16 @@ import AnimeVideoPlayer from "../components/AnimeVideoPlayer";
 import AnimeEpisodes from "../components/AnimeEpisodes";
 
 const WatchAnime = () => {
-  // const player = useRef < HTMLVmPlayerElement > null;
-  // const [videoSource, setVideoSource] = useState("");
-  const [currentEpisode, setCurrentEpisode] = useState(1);
   const { path } = useParams();
 
-  const { videoSource, animeInfo } = useFetchAnimeVideoAndInfo(
-    path,
-    currentEpisode
-  );
+  const { videoSource, animeInfo, relatedAnime } =
+    useFetchAnimeVideoAndInfo(path);
 
   return (
     <div>
       <AnimeVideoPlayer videoSource={videoSource} />
 
-      <AnimeEpisodes
-        animeInfo={animeInfo}
-        setCurrentEpisode={setCurrentEpisode}
-        currentEpisode={currentEpisode}
-      />
+      <AnimeEpisodes animeInfo={animeInfo} path={path} />
 
       {/* Anime Info */}
       <div className="flex justify-between gap-x-2 w-full">
@@ -58,65 +49,27 @@ const WatchAnime = () => {
         <p className="text-white text-xl">Related</p>
 
         <div className="bg-[#121212] h-56 overflow-x-scroll space-y-3 p-2 rounded text-white">
-          <div className="bg-[#202022] p-2 rounded flex space-x-5">
-            <div className="w-16 h-14 bg-red-50">
-              <img
-                src={AnimeCover}
-                alt=""
-                className="w-full h-full object-cover"
-              />
-            </div>
+          {relatedAnime &&
+            relatedAnime.map((anime) => (
+              <Link key={anime.id} to={`/watch/${anime.id}-episode-1`}>
+                <div className="bg-[#202022] p-2 rounded flex space-x-5">
+                  <div className="w-16 h-14 bg-red-50">
+                    <img
+                      src={anime.image}
+                      alt=""
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
 
-            <div className="space-y-1">
-              <p className="text-lg">One piece</p>
-              <p className="text-xs">Oct 20,1999 TV Series 24m </p>
-            </div>
-          </div>
-
-          <div className="bg-[#202022] p-2 rounded flex space-x-5">
-            <div className="w-16 h-14 bg-red-50">
-              <img
-                src={AnimeCover}
-                alt=""
-                className="w-full h-full object-cover"
-              />
-            </div>
-
-            <div className="space-y-1">
-              <p className="text-lg">One piece</p>
-              <p className="text-xs">Oct 20,1999 TV Series 24m </p>
-            </div>
-          </div>
-
-          <div className="bg-[#202022] p-2 rounded flex space-x-5">
-            <div className="w-16 h-14 bg-red-50">
-              <img
-                src={AnimeCover}
-                alt=""
-                className="w-full h-full object-cover"
-              />
-            </div>
-
-            <div className="space-y-1">
-              <p className="text-lg">One piece</p>
-              <p className="text-xs">Oct 20,1999 TV Series 24m </p>
-            </div>
-          </div>
-
-          <div className="bg-[#202022] p-2 rounded flex space-x-5">
-            <div className="w-16 h-14 bg-red-50">
-              <img
-                src={AnimeCover}
-                alt=""
-                className="w-full h-full object-cover"
-              />
-            </div>
-
-            <div className="space-y-1">
-              <p className="text-lg">One piece</p>
-              <p className="text-xs">Oct 20,1999 TV Series 24m </p>
-            </div>
-          </div>
+                  <div className="space-y-1">
+                    <p className="text-lg">{anime.title}</p>
+                    <p className="text-xs">
+                      {anime.releaseDate} -{anime.type}-{anime.status}
+                    </p>
+                  </div>
+                </div>
+              </Link>
+            ))}
         </div>
       </div>
 

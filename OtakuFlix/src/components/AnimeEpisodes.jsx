@@ -1,20 +1,22 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
-const AnimeEpisodes = ({ animeInfo, setCurrentEpisode, currentEpisode }) => {
+const AnimeEpisodes = ({ animeInfo, path }) => {
+  const number = path.replace(/\D/g, "");
+
   return (
     <div className="bg-[#121212] my-5 p-2 flex  flex-wrap gap-3">
       {animeInfo.episodes
         ? animeInfo.episodes.map((episode) => (
-            <button
-              className={`px-4 py-1 bg-[#343434] rounded ${
-                episode.number == currentEpisode
-                  ? "bg-primary font-semibold"
-                  : ""
+            <Link
+              to={`/watch/${episode.id}`}
+              key={episode.id}
+              className={`px-4 py-1 bg-[#343434] rounded  ${
+                episode.number == number ? "bg-primary" : ""
               }`}
-              onClick={() => setCurrentEpisode(episode.number)}
             >
               {episode.number}
-            </button>
+            </Link>
           ))
         : "not Available"}
     </div>

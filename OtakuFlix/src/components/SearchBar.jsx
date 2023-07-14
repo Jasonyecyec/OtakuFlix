@@ -157,7 +157,10 @@ const SearchBar = () => {
             <div className="list-result-container">
               {searchResults.data.length > 0 ? (
                 searchResults.data.map((anime) => (
-                  <Link to={`/watch/${anime.id}`} onClick={handleClickLink}>
+                  <Link
+                    to={`/watch/${anime.id}-episode-1`}
+                    onClick={handleClickLink}
+                  >
                     <HoveredDiv key={anime.id}>
                       <div className="bg-slate-900 object-contain">
                         <img src={anime.image} alt="" className="w-10 h-10" />

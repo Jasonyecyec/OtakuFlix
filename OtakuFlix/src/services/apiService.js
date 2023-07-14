@@ -33,10 +33,10 @@ export const getAnimeSearchResults = async (searchTerm) => {
   }
 };
 
-export const getAnimeVideoSource = async (animeId, episode) => {
+export const getAnimeVideoSource = async (animeId) => {
   try {
     const animeVideoSource = await axios.get(
-      `${API_URL_ANIME}watch/${animeId}-episode-${episode}`
+      `${API_URL_ANIME}watch/${animeId}`
     );
 
     return animeVideoSource;
@@ -44,10 +44,4 @@ export const getAnimeVideoSource = async (animeId, episode) => {
     console.error("Error retrieving anime video source:", error);
     throw error;
   }
-};
-
-export const getAnimeEpisodeList = async (animeId) => {
-  try {
-    const episodeList = await axios.get(`${API_URL_ANIME}watch/${animeId}`);
-  } catch (error) {}
 };
