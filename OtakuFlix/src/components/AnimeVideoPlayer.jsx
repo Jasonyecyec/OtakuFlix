@@ -1,22 +1,31 @@
-import React from "react";
-import { Player, Video, DefaultUi, DefaultControls, Hls } from "@vime/react";
+import React, { useEffect, useRef } from "react";
+import Hls from "hls.js";
 
 const AnimeVideoPlayer = ({ videoSource }) => {
-  return (
-    <div className="w-full bg-[#ae2e2e] object-cover rounded mt-10 ">
-      <Player>
-        {/* <Video ref={videoRef} crossOrigin="anonymous" /> */}
-        <Hls version="latest">
-          <source data-src={videoSource} type="application/x-mpegURL" />
-        </Hls>
+  const videoRef = useRef(null);
+  let hls = null;
 
-        {/* We've replaced the `<Ui />` component. */}
-        {/* We can turn off any features we don't want via properties. */}
-        <DefaultUi noControls>
-          {/* We setup the default controls and pass in any options. */}
-          <DefaultControls hideOnMouseLeave activeDuration={2000} />
-        </DefaultUi>
-      </Player>
+  useEffect(() => {
+    const videoElement = videoRef.current;
+
+    if (Hls.isSupported()) {
+      hls = new Hls();
+      hls.loadSource(videoSource);
+      hls.attachMedia(videoElement);
+      hls.on(Hls.Events.MANIFEST_PARSED, () => {
+        videoElement.play();
+      });
+    }
+
+    return () => {
+      if (hls) {
+        hls.destroy();
+      }
+    };
+  }, [videoSource]);
+  return (
+    <div className="w-full  object-cover rounded mt-10 ">
+      <video ref={videoRef} controls className="w-full h-full rounded-md" />
     </div>
   );
 };
