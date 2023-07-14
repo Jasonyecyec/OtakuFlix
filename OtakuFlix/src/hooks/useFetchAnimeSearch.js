@@ -63,7 +63,7 @@ const useFetchAnimeSearch = (searchInput) => {
     //   // Set a new timer to delay the API call
     delayTimerRef.current = setTimeout(() => {
       fetchData();
-    }, 1800); // Adjust the delay time according to your needs (in milliseconds)
+    }, 1000); // Adjust the delay time according to your needs (in milliseconds)
 
     //cleanup
     return () => {

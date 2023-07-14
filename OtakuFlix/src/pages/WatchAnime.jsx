@@ -1,97 +1,54 @@
 import React, { useRef, useState, useEffect } from "react";
-import { Player, Video, DefaultUi, DefaultControls, Hls } from "@vime/react";
 import AnimeCover from "../assets/aot.jpg";
 import Footer from "../components/Footer";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
+import useFetchAnimeVideoAndInfo from "../hooks/useFetchAnimeVideoAndInfo";
+import { Player, Video, DefaultUi, DefaultControls, Hls } from "@vime/react";
+import AnimeVideoPlayer from "../components/AnimeVideoPlayer";
+import AnimeEpisodes from "../components/AnimeEpisodes";
 
 const WatchAnime = () => {
   // const player = useRef < HTMLVmPlayerElement > null;
-  const [videoSource, setVideoSource] = useState("");
+  // const [videoSource, setVideoSource] = useState("");
+  const [currentEpisode, setCurrentEpisode] = useState(1);
   const { path } = useParams();
 
-  useEffect(() => {
-    //fetch anime streaming source
-    const fetchAnimeSource = async () => {
-      try {
-        const source = await axios.get(
-          `https://api.consumet.org/anime/gogoanime/watch/${path}-episode-1`
-        );
-
-        // filter source only get highest quality
-        const highestQuality = source.data.sources.find((item) => {
-          return item.quality === "720p";
-        });
-
-        setVideoSource(highestQuality.url);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-
-    fetchAnimeSource();
-  }, [path]);
+  const { videoSource, animeInfo } = useFetchAnimeVideoAndInfo(
+    path,
+    currentEpisode
+  );
 
   return (
     <div>
-      {/* Video player */}
-      <div className="w-full bg-[#ae2e2e] object-cover rounded mt-10 ">
-        <Player>
-          {/* <Video ref={videoRef} crossOrigin="anonymous" /> */}
-          <Hls version="latest">
-            <source data-src={videoSource} type="application/x-mpegURL" />
-          </Hls>
+      <AnimeVideoPlayer videoSource={videoSource} />
 
-          {/* We've replaced the `<Ui />` component. */}
-          {/* We can turn off any features we don't want via properties. */}
-          <DefaultUi noControls>
-            {/* We setup the default controls and pass in any options. */}
-            <DefaultControls hideOnMouseLeave activeDuration={2000} />
-          </DefaultUi>
-        </Player>
-      </div>
-
-      {/* Episodes */}
-      <div className="bg-[#121212] my-5 p-2 flex  flex-wrap gap-3">
-        <button className="px-4 py-1 bg-primary rounded font-semibold">
-          1
-        </button>
-        <button className="px-4 py-1 bg-[#343434] rounded">1</button>
-        <button className="px-4 py-1 bg-[#343434] rounded">2</button>
-        <button className="px-4 py-1 bg-[#343434] rounded">3</button>
-        <button className="px-4 py-1 bg-[#343434] rounded">4</button>
-        <button className="px-4 py-1 bg-[#343434] rounded">5</button>
-        <button className="px-4 py-1 bg-[#343434] rounded">6</button>
-        <button className="px-4 py-1 bg-[#343434] rounded">7</button>
-        <button className="px-4 py-1 bg-[#343434] rounded">8</button>
-      </div>
+      <AnimeEpisodes
+        animeInfo={animeInfo}
+        setCurrentEpisode={setCurrentEpisode}
+        currentEpisode={currentEpisode}
+      />
 
       {/* Anime Info */}
       <div className="flex justify-between gap-x-2 w-full">
         <div className="w-[25%] rounded ">
           <img
-            src={AnimeCover}
+            src={animeInfo.image}
             alt=""
             className="w-full h-24 object-cover rounded drop-shadow-md"
           />
         </div>
 
         <div className="text-white space-y-2 w-[75%]">
-          <p className="text-xl font-semibold">One Piece</p>
-          <p className="text-sm ">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua.
-          </p>
+          <p className="text-xl font-semibold">{animeInfo.title}</p>
+          <p className="text-sm ">{animeInfo.description} </p>
+
           <div className="text-sm space-y-2">
-            <p>Type: TV</p>
+            <p>Type: {animeInfo.type}</p>
             <p>Country: Japan</p>
-            <p>Premiered: Fall 1999</p>
-            <p>Date aired: Oct 20, 1999</p>
-            <p>Status: Releasing</p>
-            <p>
-              Genres: Action, Adventurem, Comedy, Drama, Fantasy, Shounen, Super
-              Power
-            </p>
+            <p>Release date: {animeInfo.releaseDate}</p>
+            <p>Status: {animeInfo.status}</p>
+            <p>Genres: {animeInfo.genres && animeInfo.genres.join(", ")}</p>
           </div>
         </div>
       </div>
