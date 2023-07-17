@@ -7,12 +7,17 @@ import useFetchAnimeVideoAndInfo from "../hooks/useFetchAnimeVideoAndInfo";
 import { Player, Video, DefaultUi, DefaultControls, Hls } from "@vime/react";
 import AnimeVideoPlayer from "../components/AnimeVideoPlayer";
 import AnimeEpisodes from "../components/AnimeEpisodes";
+import RelatedAnime from "../components/RelatedAnime";
 
 const WatchAnime = () => {
   const { path } = useParams();
 
   const { videoSource, animeInfo, relatedAnime } =
     useFetchAnimeVideoAndInfo(path);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [path]);
 
   return (
     <div>
@@ -21,7 +26,7 @@ const WatchAnime = () => {
       <AnimeEpisodes animeInfo={animeInfo} path={path} />
 
       {/* Anime Info */}
-      <div className="flex justify-between gap-x-2 w-full">
+      <div className="flex justify-between gap-x-2 w-full ">
         <div className="w-[25%] rounded ">
           <img
             src={animeInfo.image}
@@ -30,8 +35,10 @@ const WatchAnime = () => {
           />
         </div>
 
-        <div className="text-white space-y-2 w-[75%]">
-          <p className="text-xl font-semibold">{animeInfo.title}</p>
+        <div className="text-[#969595] space-y-2 w-[75%]">
+          <p className="text-xl font-semibold text-slate-100">
+            {animeInfo.title}
+          </p>
           <p className="text-sm ">{animeInfo.description} </p>
 
           <div className="text-sm space-y-2">
@@ -45,33 +52,7 @@ const WatchAnime = () => {
       </div>
 
       {/* Related */}
-      <div className="mt-10  space-y-5">
-        <p className="text-white text-xl">Related</p>
-
-        <div className="bg-[#121212] h-56 overflow-x-scroll space-y-3 p-2 rounded text-white">
-          {relatedAnime &&
-            relatedAnime.map((anime) => (
-              <Link key={anime.id} to={`/watch/${anime.id}-episode-1`}>
-                <div className="bg-[#202022] p-2 rounded flex space-x-5">
-                  <div className="w-16 h-14 bg-red-50">
-                    <img
-                      src={anime.image}
-                      alt=""
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-
-                  <div className="space-y-1">
-                    <p className="text-lg">{anime.title}</p>
-                    <p className="text-xs">
-                      {anime.releaseDate} -{anime.type}-{anime.status}
-                    </p>
-                  </div>
-                </div>
-              </Link>
-            ))}
-        </div>
-      </div>
+      {relatedAnime ? <RelatedAnime relatedAnime={relatedAnime} /> : ""}
 
       {/* Comments */}
       <div className="mt-10 text-white mb-32">

@@ -19,9 +19,13 @@ const useFetchAnimeVideoAndInfo = (animeId) => {
           const source = await getAnimeVideoSource(animeId);
 
           // filter source only get highest quality
-          const highestQuality = source.data.sources.find((item) => {
-            return item.quality === "720p";
-          });
+          const highestQuality =
+            source.data.sources.find((item) => {
+              return item.quality === "720p";
+            }) ||
+            source.data.sources.find((item) => {
+              return item.quality === "480p";
+            });
 
           setVideoSource(highestQuality.url);
         } catch (error) {
@@ -35,7 +39,7 @@ const useFetchAnimeVideoAndInfo = (animeId) => {
       if (isMounted) {
         try {
           const animeInfoResult = await getAnimeInfo(extractedAnimeId);
-          console.log(animeInfoResult.data);
+
           setAnimeInfo(animeInfoResult.data);
         } catch (error) {
           console.error("Error retrieving anime info:", error);

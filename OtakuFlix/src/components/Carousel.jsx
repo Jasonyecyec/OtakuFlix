@@ -4,6 +4,7 @@ import btnTriangle from "../assets/btnTriangle.svg";
 import onePiece from "../assets/one-piece.jpg";
 import add from "../assets/add.svg";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { useTopAnimeStore } from "/src/store/store.js";
@@ -95,20 +96,18 @@ const Carousel = () => {
                     <p className="text-base">
                       {anime.genres[0]}, {anime.genres[1]}{" "}
                     </p>
+                    {console.log(anime.id)}
                   </div>
 
-                  <p className="absolute left-0 top-20 text-white hidden">
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                    Repudiandae at eaque deserunt neque pariatur suscipit
-                    expedita eius quibusdam obcaecati explicabo.
-                  </p>
                   <div></div>
 
                   <div className="absolute bottom-2 left-3 text-white flex">
-                    <button className="bg-primary text-background font-semibold p-2 text-xs rounded flex justify-center content-center">
-                      <img src={btnTriangle} alt="" className="block h-4" />
-                      <p className="ml-2 font-semibold">Watch Now</p>
-                    </button>
+                    <Link to={`/watch/${anime.id}-episode-1`}>
+                      <button className="bg-primary text-background font-semibold p-2 text-xs rounded flex justify-center content-center">
+                        <img src={btnTriangle} alt="" className="block h-4" />
+                        <p className="ml-2 font-semibold">Watch Now</p>
+                      </button>
+                    </Link>
 
                     <button className="bg-[#D9D9D9] p-2 text-xs rounded text-background ml-3">
                       <img src={add} alt="" className="h-3 w-3" />

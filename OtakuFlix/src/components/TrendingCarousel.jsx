@@ -4,6 +4,7 @@ import axios from "axios";
 
 import "swiper/css";
 import "swiper/css/pagination";
+import { AiOutlineCaretLeft, AiOutlineCaretRight } from "react-icons/ai";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import aot from "../assets/aot.jpg";
@@ -51,16 +52,16 @@ const TrendingCarousel = ({ title, url }) => {
 
         <div className=" w-24 flex justify-between ">
           <button
-            className="bg-subBackground rounded-full w-10 h-10 drop-shadow-2xl"
+            className="bg-subBackground rounded-full w-10 h-10 drop-shadow-2xl flex justify-center items-center"
             onClick={slidePrev}
           >
-            -
+            <AiOutlineCaretLeft />
           </button>
           <button
-            className="bg-subBackground rounded-full w-10 h-10 drop-shadow-2xl"
+            className="bg-subBackground rounded-full w-10 h-10 drop-shadow-2xl flex justify-center items-center"
             onClick={slideNext}
           >
-            +
+            <AiOutlineCaretRight className="" />
           </button>
         </div>
       </div>
