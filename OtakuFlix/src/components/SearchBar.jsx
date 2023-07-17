@@ -159,6 +159,7 @@ const SearchBar = () => {
                 searchResults.data.map((anime) => (
                   <Link
                     to={`/watch/${anime.id}-episode-1`}
+                    key={anime.id}
                     onClick={handleClickLink}
                   >
                     <HoveredDiv key={anime.id}>
