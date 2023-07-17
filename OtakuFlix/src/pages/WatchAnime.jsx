@@ -4,7 +4,6 @@ import Footer from "../components/Footer";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import useFetchAnimeVideoAndInfo from "../hooks/useFetchAnimeVideoAndInfo";
-import { Player, Video, DefaultUi, DefaultControls, Hls } from "@vime/react";
 import AnimeVideoPlayer from "../components/AnimeVideoPlayer";
 import AnimeEpisodes from "../components/AnimeEpisodes";
 import RelatedAnime from "../components/RelatedAnime";
